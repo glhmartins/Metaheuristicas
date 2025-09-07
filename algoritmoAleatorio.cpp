@@ -4,6 +4,7 @@
 
 using namespace std;
 
+// Preciso modificar para retirar elementos já selecionados
 int mochila(int *o, int *p, int *b, int *s, int tam, int peso){
     srand(time(NULL));
     int pa = 0, r = rand()%tam, sum = 0;

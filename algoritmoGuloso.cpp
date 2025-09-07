@@ -6,7 +6,7 @@ void bubble(int *o, int *p, int *b, int tam){
     int i, j, to, tp, tb;
     for (i = 0; i<tam-1; i++){
         for(j = i+1; j<tam; j++){
-            if ((b[i]/p[i])>=(b[j]/p[j])){
+            if ((b[i]/p[i])<=(b[j]/p[j])){
                 to = o[i];
                 tp = p[i];
                 tb = b[i];
