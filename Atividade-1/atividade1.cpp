@@ -12,11 +12,16 @@ int somaDependencias(int p, vector<vector<int>> ma, vector<int> d, vector<int> &
     int sum = 0;
     for(int i = 0; i<ma.size(); i++){
         if(ma[i][0] == p){
+            /* 
+                So somo a dependencia se ela não tiver sido somada,
+                caso já tenha sido somada por também ser dependencia 
+                de outro pacote, não será somada.
+            */
             auto it = find(v.begin(), v.end(), ma[i][1]);
             if(it == v.end()){
                 sum += d[ma[i][1]];
                 v.push_back(ma[i][1]);
-                cout << ma[i][0] << " " << ma[i][1] << endl;
+                //cout << ma[i][0] << " " << ma[i][1] << endl;
             }
         }
     }
@@ -30,15 +35,21 @@ void gulosoAleatorio(int m, int n, int ne, int cap, vector<int> &p, float fator,
     for(int k = 0; k<m; k++) pos.push_back(k);
     mergesort(b, pos, 0, m-1);
     while(pa<cap){
+        // Somo as dependencias
         sumDeps = somaDependencias(pos[r], ma, d, v);
+        // Verifico se sua soma estoura a capacidade
         if(pa+sumDeps>cap) break;
+        // No vetor p que contem 0's eu coloco 1 na posicao que foi escolhida, somo seu beneficio o peso de suas dependencias
+        // retiro o beneficio escolhido para que nao seja acessado dnv e calculo um novo numero aleatorio
         p[pos[r]] = 1;
         be += b[r];
         pa += sumDeps;
+        b.erase(b.begin()+r);
         pos.erase(pos.begin()+r);
         r = (rand()%pos.size())*fator;
+        //cout << "be: " << be << " b[r]: " << b[r] << " pa: " << pa << " sumDeps: " << sumDeps << endl;
     }
-    cout << endl;
+    cout << endl << "Guloso Aleatorio" << endl;
     for(int k = 0; k<m; k++) cout << p[k];
     cout << endl << "capacidade usada: " << pa << ", capacidade maxima: " << cap << endl;
     cout << "beneficio: " << be << endl;
@@ -55,14 +66,21 @@ void aleatorio(int m, int n, int ne, int cap, vector<int> &p, vector<int> d, vec
     vector<int> pos, v;
     for(int k = 0; k<m; k++) pos.push_back(k);
     while(pa<cap){
+        // Somo as dependencias
         sumDeps = somaDependencias(pos[r], ma, d, v);
+        // Verifico se sua soma estoura a capacidade
         if(pa+sumDeps>cap) break;
+        // No vetor p que contem 0's eu coloco 1 na posicao que foi escolhida, somo seu beneficio o peso de suas dependencias
+        // retiro o beneficio escolhido para que nao seja acessado dnv e calculo um novo numero aleatorio
         p[pos[r]] = 1;
         be += b[r];
         pa += sumDeps;
+        b.erase(b.begin()+r);
         pos.erase(pos.begin()+r);
         r = rand()%pos.size();
+        //cout << "be: " << be << " b[r]: " << b[r] << " pa: " << pa << " sumDeps: " << sumDeps << endl;
     }
+    cout << endl << "Aleatorio" << endl;
     for(int k = 0; k<m; k++) cout << p[k];
     cout << endl << "capacidade usada: " << pa << ", capacidade maxima: " << cap << endl;
     cout << "beneficio: " << be << endl;
@@ -79,13 +97,17 @@ void guloso(int m, int n, int ne, int cap, vector<int> &p, vector<int> d, vector
     for(int k = 0; k<m; k++) pos.push_back(k);
     mergesort(b, pos, 0, m-1);
     while((i<m)){ 
+        // Somo as dependencias
         sumDeps = somaDependencias(pos[i], ma, d, v);
+        // Verifico se sua soma estoura a capacidade
         if(pa+sumDeps>cap) break;
         pa += sumDeps;
         p[pos[i]] = 1;
         be += b[i];
         i++;
+        //cout << "be: " << be << " b[r]: " << b[i] << " pa: " << pa << " sumDeps: " << sumDeps << endl;
     }
+    cout << endl << "Guloso" << endl;
     for(int k = 0; k<m; k++) cout << p[k];
     cout << endl << "capacidade usada: " << pa << ", capacidade maxima: " << cap << endl;
     cout << "beneficio: " << be << endl;
@@ -97,8 +119,8 @@ int main(){
     vector<vector<int>> ma;
     leArquivo(d, b, ma, "prob-software.txt",&m, &n, &ne, &cap);
     vector<int> p(m, 0);
-    //aleatorio(m, n, ne, cap, p, d, b, ma);
+    aleatorio(m, n, ne, cap, p, d, b, ma);
     guloso(m, n, ne, cap, p, d, b, ma);
-    //gulosoAleatorio(m, n, ne, cap, p, 0, d, b, ma);
+    gulosoAleatorio(m, n, ne, cap, p, 0.4, d, b, ma);
     return 0;
 }
