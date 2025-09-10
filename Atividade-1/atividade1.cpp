@@ -16,9 +16,9 @@ int somaDependencias(int p, vector<vector<int>> ma, vector<int> d, vector<int> &
             if(it == v.end()){
                 sum += d[ma[i][1]];
                 v.push_back(ma[i][1]);
+                cout << ma[i][0] << " " << ma[i][1] << endl;
             }
         }
-        cout << ma[i][0] << " " << ma[i][1] << endl;
     }
     return sum;
 }
@@ -37,7 +37,6 @@ void gulosoAleatorio(int m, int n, int ne, int cap, vector<int> &p, float fator,
         pa += sumDeps;
         pos.erase(pos.begin()+r);
         r = (rand()%pos.size())*fator;
-        cout << r << " ";
     }
     cout << endl;
     for(int k = 0; k<m; k++) cout << p[k];
@@ -52,7 +51,7 @@ void gulosoAleatorio(int m, int n, int ne, int cap, vector<int> &p, float fator,
 void aleatorio(int m, int n, int ne, int cap, vector<int> &p, vector<int> d, vector<int> b, vector<vector<int>> ma){
     srand(time(NULL));
     // pa = peso atual (custo), "r" recebe o numero aleatorio gerado e 'be' soma os beneficios
-    int pa = 0, r = rand()%m, sumDeps = 0, be = 0;
+    int pa = 0, r = rand()%(m-1), sumDeps = 0, be = 0;
     vector<int> pos, v;
     for(int k = 0; k<m; k++) pos.push_back(k);
     while(pa<cap){
@@ -99,7 +98,7 @@ int main(){
     leArquivo(d, b, ma, "prob-software.txt",&m, &n, &ne, &cap);
     vector<int> p(m, 0);
     //aleatorio(m, n, ne, cap, p, d, b, ma);
-    guloso(m, n, ne, cap, p, d, b, ma);
-    //gulosoAleatorio(m, n, ne, cap, p, 0, d, b, ma);
+    //guloso(m, n, ne, cap, p, d, b, ma);
+    gulosoAleatorio(m, n, ne, cap, p, 1, d, b, ma);
     return 0;
 }
