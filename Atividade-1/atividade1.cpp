@@ -25,7 +25,7 @@ int somaDependencias(int p, vector<vector<int>> ma, vector<int> d, vector<int> &
 
 void gulosoAleatorio(int m, int n, int ne, int cap, vector<int> &p, float fator, vector<int> d, vector<int> b, vector<vector<int>> ma){
     srand(time(NULL));
-    int i = 0, pa = 0, sumDeps = 0, be = 0, r = (rand()%m)*fator;
+    int pa = 0, sumDeps = 0, be = 0, r = (rand()%(m-1))*fator;
     vector<int> pos, v;
     for(int k = 0; k<m; k++) pos.push_back(k);
     mergesort(b, pos, 0, m-1);
@@ -33,7 +33,7 @@ void gulosoAleatorio(int m, int n, int ne, int cap, vector<int> &p, float fator,
         sumDeps = somaDependencias(pos[r], ma, d, v);
         if(pa+sumDeps>cap) break;
         p[pos[r]] = 1;
-        be += b[pos[r]];
+        be += b[r];
         pa += sumDeps;
         pos.erase(pos.begin()+r);
         r = (rand()%pos.size())*fator;
@@ -58,7 +58,7 @@ void aleatorio(int m, int n, int ne, int cap, vector<int> &p, vector<int> d, vec
         sumDeps = somaDependencias(pos[r], ma, d, v);
         if(pa+sumDeps>cap) break;
         p[pos[r]] = 1;
-        be += b[pos[r]];
+        be += b[r];
         pa += sumDeps;
         pos.erase(pos.begin()+r);
         r = rand()%pos.size();
@@ -98,7 +98,7 @@ int main(){
     leArquivo(d, b, ma, "prob-software.txt",&m, &n, &ne, &cap);
     vector<int> p(m, 0);
     //aleatorio(m, n, ne, cap, p, d, b, ma);
-    //guloso(m, n, ne, cap, p, d, b, ma);
-    gulosoAleatorio(m, n, ne, cap, p, 1, d, b, ma);
+    guloso(m, n, ne, cap, p, d, b, ma);
+    //gulosoAleatorio(m, n, ne, cap, p, 0, d, b, ma);
     return 0;
 }
