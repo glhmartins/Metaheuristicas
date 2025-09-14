@@ -28,7 +28,7 @@ int somaDependencias(int p, vector<vector<int>> ma, vector<int> d, vector<int> &
     return sum;
 }
 
-void gulosoAleatorio(int m, int n, int ne, int cap, vector<int> &p, float fator, vector<int> d, vector<int> b, vector<vector<int>> ma){
+void gulosoAleatorio(int m, int cap, vector<int> p, float fator, vector<int> d, vector<int> b, vector<vector<int>> ma){
     srand(time(NULL));
     int pa = 0, sumDeps = 0, be = 0, r = (rand()%(m-1))*fator;
     vector<int> pos, v;
@@ -59,7 +59,7 @@ void gulosoAleatorio(int m, int n, int ne, int cap, vector<int> &p, float fator,
    Utilizo o vetor pos para acessar as posições, toda vez que acesso uma posição
    eu removo ela do vetor, impedindo que fique caindo sempre na mesma posição já acessada
 */
-void aleatorio(int m, int n, int ne, int cap, vector<int> &p, vector<int> d, vector<int> b, vector<vector<int>> ma){
+void aleatorio(int m, int cap, vector<int> p, vector<int> d, vector<int> b, vector<vector<int>> ma){
     srand(time(NULL));
     // pa = peso atual (custo), "r" recebe o numero aleatorio gerado e 'be' soma os beneficios
     int pa = 0, r = rand()%(m-1), sumDeps = 0, be = 0;
@@ -90,7 +90,7 @@ void aleatorio(int m, int n, int ne, int cap, vector<int> &p, vector<int> d, vec
    No guloso eu utilizo o pos para acessar as posições de forma 
    crescente depois de ter ordenado o vetor
 */
-void guloso(int m, int n, int ne, int cap, vector<int> &p, vector<int> d, vector<int> b, vector<vector<int>> ma){
+void guloso(int m, int cap, vector<int> p, vector<int> d, vector<int> b, vector<vector<int>> ma){
     // i = indice posicao, pa = peso atual (custo), be = beneficio da solução
     int i = 0, pa = 0, sumDeps = 0, be = 0;
     vector<int> pos, v;
@@ -119,8 +119,8 @@ int main(){
     vector<vector<int>> ma;
     leArquivo(d, b, ma, "prob-software.txt",&m, &n, &ne, &cap);
     vector<int> p(m, 0);
-    aleatorio(m, n, ne, cap, p, d, b, ma);
-    guloso(m, n, ne, cap, p, d, b, ma);
-    gulosoAleatorio(m, n, ne, cap, p, 0.4, d, b, ma);
+    guloso(m,cap, p, d, b, ma);
+    aleatorio(m, cap, p, d, b, ma);
+    gulosoAleatorio(m, cap, p, 0.1, d, b, ma);
     return 0;
 }
