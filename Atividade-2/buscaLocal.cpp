@@ -201,3 +201,57 @@ vector<int> bestSwapImprovement(int m, int cap, vector<int> s, vector<int> b, ve
     return s;
 }
 
+vector<int> randomImprovement(int m, int max, int cap, vector<int> s, vector<int> b, vector<int> d, vector<vector<int>> ma){
+    srand(time(NULL));
+    vector<int> s1 = s, s2 = s, sf;
+    vector<int> fs = funcaoObjetivo(s, ma, d, b), fn;
+    int i = 0;
+    do {
+        s1 = randomSwapStep(m, max, cap, s, b, d, ma);
+        s2 = randomFlipStep(m, max, cap, s, b, d, ma);
+        sf = (funcaoObjetivo(s1, ma, d, b)>funcaoObjetivo(s2, ma, d, b)) ? s1:s2;
+        if(s!=sf){
+            s = sf;
+            i = 0;
+        }
+        i++;
+    } while(i<=max);
+    return s;
+}
+
+vector<int> firstImprovement(int m, int cap, vector<int> s, vector<int> b, vector<int> d, vector<vector<int>> ma){
+    vector<int> s1 = s, s2 = s, sf;
+    vector<int> fs = funcaoObjetivo(s, ma, d, b), fn;
+    int i = 0;
+    do {
+        s1 = firstSwapStep(m, cap, s, b, d, ma);
+        s2 = firstSwapStep(m, cap, s, b, d, ma);
+        sf = (funcaoObjetivo(s1, ma, d, b)>funcaoObjetivo(s2, ma, d, b)) ? s1:s2;
+        if(s!=sf){
+            s = sf;
+            i = 0;
+        }
+        else break;
+        i++;
+    } while(i<=m);
+    return s;
+}
+
+vector<int> bestImprovement(int m, int cap, vector<int> s, vector<int> b, vector<int> d, vector<vector<int>> ma){
+    vector<int> s1 = s, s2 = s, sf;
+    vector<int> fs = funcaoObjetivo(s, ma, d, b), fn;
+    int i = 0;
+    do {
+        s1 = bestSwapStep(m, cap, s, b, d, ma);
+        s2 = bestFlipStep(m, cap, s, b, d, ma);
+        sf = (funcaoObjetivo(s1, ma, d, b)>funcaoObjetivo(s2, ma, d, b)) ? s1:s2;
+        if(sf!=s){
+            s = sf;
+            i = 0;
+        }
+        else break;
+        i++;
+    } while(i<=m);
+    return s;
+}
+
