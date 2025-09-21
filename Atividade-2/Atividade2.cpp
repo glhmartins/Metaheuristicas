@@ -34,7 +34,7 @@ int main(){
     vector<vector<int>> ma;
     leArquivo(d, b, ma, "prob-software.txt",&m, &n, &ne, &cap);
     vector<int> p(m, 0);
-    randomAscentMethod(m, 100, cap, p, b, d, ma);
+    randomAscentMethod(m, 25, cap, p, b, d, ma);
     //firstAscentMethod(m, cap, p, b, d, ma);
     //bestAscentMethod(m, cap, p, b, d, ma);
     return 0;
