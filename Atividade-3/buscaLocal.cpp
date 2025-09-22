@@ -123,13 +123,25 @@ vector<int> randomImprovement(int m, int max, int cap, vector<int> s, vector<int
 }
 
 vector<int> firstImprovement(int m, int cap, vector<int> s, vector<int> b, vector<int> d, vector<vector<int>> ma){
+    clock_t tempo_inicio1, tempo_inicio2, tempo_fim1, tempo_fim2;
     vector<int> s1 = s, s2 = s, sf;
     vector<int> fs = funcaoObjetivo(s, ma, d, b), fn;
     int i = 0;
+    double t1, t2;
     do {
+        // Marco o tempo de execucao do primeiro algoritmo de busca na vizinhanca
+        tempo_inicio1 = clock();
         s1 = firstSwapStep(m, cap, s, b, d, ma);
+        tempo_fim1 = clock();
+        // Marco o tempo de execucao do segundo algoritmo de busca na vizinhanca
+        tempo_inicio1 = clock();
         s2 = firstFlipStep(m, cap, s, b, d, ma);
-        sf = (funcaoObjetivo(s1, ma, d, b)>funcaoObjetivo(s2, ma, d, b)) ? s1:s2;
+        tempo_fim2 = clock();
+        // Calculo o tempo total de execucao de cada um
+        t1 = (double) (tempo_fim1-tempo_inicio1)/ CLOCKS_PER_SEC;
+        t2 = (double) (tempo_fim2-tempo_inicio2)/ CLOCKS_PER_SEC;
+        // O first e aquele que executou mais rapido
+        sf = (t1<t2) ? s1:s2;
         if(s!=sf){
             s = sf;
             i = 0;
