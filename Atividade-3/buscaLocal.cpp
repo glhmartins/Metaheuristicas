@@ -42,8 +42,8 @@ vector<int> firstSwapStep(int m, int cap, vector<int> s, vector<int> b, vector<i
 }
 
 vector<int> bestSwapStep(int m, int cap, vector<int> s, vector<int> b, vector<int> d, vector<vector<int>> ma){
-    vector<int> s1;
-    vector<int> fs = funcaoObjetivo(s, ma, d, b), fn;
+    vector<int> s1, sf = s;
+    vector<int> fs = funcaoObjetivo(sf, ma, d, b), fn;
     int aux;
     for(int i = 0; i<m-1; i++){
         for(int j = i+1; j<m; j++){
@@ -54,11 +54,11 @@ vector<int> bestSwapStep(int m, int cap, vector<int> s, vector<int> b, vector<in
             fn = funcaoObjetivo(s1, ma, d, b);
             if((fn[0]>fs[0]) && (fn[1]<=cap)) {
                 fs = fn;
-                s = s1;
+                sf = s1;
             }
         }
     }
-    return s;
+    return sf;
 }
 
 vector<int> randomFlipStep(int m, int max, int cap, vector<int> s, vector<int> b, vector<int> d, vector<vector<int>> ma){
@@ -89,35 +89,33 @@ vector<int> firstFlipStep(int m, int cap, vector<int> s, vector<int> b, vector<i
 }
 
 vector<int> bestFlipStep(int m, int cap, vector<int> s, vector<int> b, vector<int> d, vector<vector<int>> ma){
-    vector<int> s1;
-    vector<int> fs = funcaoObjetivo(s, ma, d, b), fn;
+    vector<int> s1, sf = s;
+    vector<int> fs = funcaoObjetivo(sf, ma, d, b), fn;
     for(int i = 0; i<m; i++){
         s1 = s;
         s1[i] = (s1[i] == 1) ? 0:1; 
         fn = funcaoObjetivo(s1, ma, d, b);
         if((fn[0]>fs[0]) && (fn[1]<=cap)) {
             fs = fn;
-            s = s1;
+            sf = s1;
         }
     }
-    return s;
+    return sf;
 }
 
 vector<int> randomImprovement(int m, int max, int cap, vector<int> s, vector<int> b, vector<int> d, vector<vector<int>> ma){
     srand(time(NULL));
-    vector<int> s1 = s, s2 = s, sf;
+    vector<int> sf;
     vector<int> fs = funcaoObjetivo(s, ma, d, b), fn;
     int i = 0, r;
     do {
         r = rand()%2;
-        s1 = randomSwapStep(m, max, cap, s, b, d, ma);
-        s2 = randomFlipStep(m, max, cap, s, b, d, ma);
-        sf = (r == 0) ? s1:s2;
+        sf = (r == 0) ? randomSwapStep(m, max, cap, s, b, d, ma): randomFlipStep(m, max, cap, s, b, d, ma);
         if(s!=sf){
             s = sf;
             i = 0;
         }
-        i++;
+        else i++;
     } while(i<=max);
     return s;
 }
