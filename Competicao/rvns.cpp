@@ -1,9 +1,10 @@
 #include "construtores.cpp"
 #include "buscaLocal.cpp"
 
-void rvns(int m, int max, int cap, vector<int> s, vector<int> b, vector<int> d, vector<vector<int>> ma){
-    s = construtorAleatorio(m, cap, s, d, b, ma);
-    vector<int> fs = funcaoObjetivo(s, ma, d, b), fn, sf;
+void rvns(int m, int max, int cap, float alpha, vector<bool> s, vector<int> b, vector<int> d, vector<vector<int>> ma){
+    s = construtorGulosoAleatorio(m, cap, s, alpha, d, b, ma);
+    vector<int> fs = funcaoObjetivo(s, ma, d, b), fn;
+    vector<bool> sf;
     cout << "Beneficio pos construcao: " << fs[0] << " peso pos construcao: " << fs[1] << endl;
     int i = 0, r;
     do {
@@ -25,7 +26,7 @@ int main(){
     vector<int> d, b;
     vector<vector<int>> ma;
     leArquivo(d, b, ma, "prob-software.txt",&m, &n, &ne, &cap);
-    vector<int> p(m, 0);
-    rvns(m, 25, cap, p, b, d, ma);
+    vector<bool> p(m, false);
+    rvns(m, 25, cap, 0.5, p, b, d, ma);
     return 0;
 }
