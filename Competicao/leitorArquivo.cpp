@@ -5,7 +5,12 @@
 
 using namespace std;
 
-void converteLinhaTamanhos(ifstream &arq, int *m, int *n, int *ne, int *cap){
+typedef struct {
+    int np;
+    vector<int> d;
+} TP;
+
+void converteLinhaTamanhos(ifstream &arq, int &m, int &n, int &ne, int &cap){
     string line;
     getline(arq, line);
     istringstream iss(line);
@@ -13,10 +18,10 @@ void converteLinhaTamanhos(ifstream &arq, int *m, int *n, int *ne, int *cap){
     for (string s; iss >> s; ){
         sizes.push_back(s);
     }
-    *m = stoi(sizes.at(0));
-    *n = stoi(sizes.at(1));
-    *ne = stoi(sizes.at(2));
-    *cap = stoi(sizes.at(3));
+    m = stoi(sizes.at(0));
+    n = stoi(sizes.at(1));
+    ne = stoi(sizes.at(2));
+    cap = stoi(sizes.at(3));
 }
 
 void converteLinha(ifstream &arq, vector<int> &x){
@@ -28,7 +33,7 @@ void converteLinha(ifstream &arq, vector<int> &x){
     }
 }
 
-void auxDependencia(string line, vector<int> &aux){
+void auxDependencia(string &line, vector<int> &aux){
     istringstream iss(line);
     for (string s; iss >> s; ){
         aux.push_back(stoi(s));
@@ -44,7 +49,7 @@ void converteDependencias(ifstream &arq, vector<vector<int>> &ma){
     }
 }
 
-void leArquivo(vector<int> &d, vector<int> &b, vector<vector<int>> &ma, string nomeArquivo, int *m, int *n, int *ne, int *cap){
+void leArquivo(vector<int> &d, vector<int> &b, vector<vector<int>> &ma, string nomeArquivo, int &m, int &n, int &ne, int &cap){
     ifstream arq(nomeArquivo);
     converteLinhaTamanhos(arq, m, n, ne, cap);
     converteLinha(arq, b);
