@@ -2,7 +2,7 @@
 #include "buscaLocal.cpp"
 
 void rvns(int &m, int max, int &cap, float alpha, vector<bool> s, vector<int> &b, vector<int> &d, vector<vector<int>> &ma){
-    s = construtorGuloso(m, cap, s, d, b, ma);
+    s = construtorGulosoAleatorio(m, cap, s, alpha, d, b, ma);
     vector<int> fs = funcaoObjetivo(s, ma, d, b), fn;
     vector<bool> sf;
     cout << "Beneficio pos construcao: " << fs[0] << " peso pos construcao: " << fs[1] << endl;
@@ -29,7 +29,7 @@ int main(){
     vector<vector<int>> ma;
     leArquivo(d, b, ma, "i6.txt",m, n, ne, cap);
     vector<bool> p(m+1, false);
-    rvns(m, 25, cap, 0.75, p, b, d, ma);
+    rvns(m, 25, cap, 0.35, p, b, d, ma);
     clock_t tf = clock();
     double t = (double) (tf-ti)/CLOCKS_PER_SEC;
     cout << t << endl;

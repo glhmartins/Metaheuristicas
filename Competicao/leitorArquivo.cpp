@@ -5,11 +5,6 @@
 
 using namespace std;
 
-typedef struct {
-    int np;
-    vector<int> d;
-} TP;
-
 void converteLinhaTamanhos(ifstream &arq, int &m, int &n, int &ne, int &cap){
     string line;
     getline(arq, line);
