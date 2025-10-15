@@ -2,23 +2,55 @@
 
 using namespace std;
 
-vector<bool> pertubacao(int &m, int nivel, int &cap, vector<bool> s, vector<int> &b, vector<int> &d, vector<TP> &ma){
-    vector<bool> s1 = s;
-    double a = m*0.05*nivel;
-    return s1;
+void preencher(int &m, const vector<bool>& s, vector<int> &dt, vector<int> &f) {
+    dt.clear();
+    f.clear();
+    for (int i = 0; i < m; i++) {
+        if (s[i]) dt.push_back(i);
+        else f.push_back(i);
+    }
 }
 
 vector<bool> randomSwapStep(int &m, int &max, int &cap, const vector<bool> &s, vector<int> &b, vector<int> &d, vector<TP> &ma){
-    vector<bool> s1;
-    vector<int> fs = funcaoObjetivo(s, ma, d, b), fn(2,0);
-    int r1, r2, i = 0;
+    vector<bool> s1 = s;
+    vector<int> fs = funcaoObjetivo(s, ma, d, b), fn(2,0), dt, f;
+    preencher(m, s, dt, f);
+    int r1, r2, i = 0, in, out;
     do {
-        s1 = s;
-        r1 = rand()%m;
-        r2 = rand()%m;
-        if (s1[r1]!=s1[r2]){
-            swap(s1[r1], s1[r2]);
-            fn[0] = fs[0]-(b[r1]*s[r1])-(b[r2]*s[r2])+(b[r1]*s1[r1])+(b[r2]*s1[r2]);
+        r1 = rand()%(dt.size());
+        r2 = rand()%(f.size());
+        in = dt[r1];
+        out = f[r2];
+        swap(s1[in], s1[out]);
+        fn[0] = fs[0]-b[in]+b[out];
+        if(fn[0]>fs[0]){
+            fn[1] = peso(s1, ma, d);
+            if(fn[1]<=cap){
+                s1[m] = true;
+                return s1;
+            }
+        }
+        else if(fn[0]==fs[0]){
+            fn[1] = peso(s1, ma, d);
+            if(fn[1]<fs[1]){
+                s1[m] = true;
+                return s1;
+            }
+        }
+        swap(s1[in], s1[out]);
+        i++;
+    } while (i<max);
+    return s;
+}
+
+vector<bool> firstSwapStep(int &m, int &cap, const vector<bool> &s, vector<int> &b, vector<int> &d, vector<TP> &ma){
+    vector<bool> s1 = s;
+    vector<int> fs = funcaoObjetivo(s, ma, d, b), fn(2,0), dt, f;
+    preencher(m, s, dt, f);
+    for(int in: dt){
+        for(int out: f){
+            swap(s1[in], s1[out]);
+            fn[0] = fs[0]-b[in]+b[out];
             if(fn[0]>fs[0]){
                 fn[1] = peso(s1, ma, d);
                 if(fn[1]<=cap){
@@ -33,36 +65,7 @@ vector<bool> randomSwapStep(int &m, int &max, int &cap, const vector<bool> &s, v
                     return s1;
                 }
             }
-        }
-        i++;
-    } while (i<max);
-    return s;
-}
-
-vector<bool> firstSwapStep(int &m, int &cap, const vector<bool> &s, vector<int> &b, vector<int> &d, vector<TP> &ma){
-    vector<bool> s1;
-    vector<int> fs = funcaoObjetivo(s, ma, d, b), fn(2,0);
-    for(int i = 0; i<m-1; i++){
-        for(int j = i+1; j<m; j++){
-            s1 = s;
-            if(s1[i]!=s1[j]){
-                swap(s1[i], s1[j]);
-                fn[0] = fs[0]-(b[i]*s[i])-(b[j]*s[j])+(b[i]*s1[i])+(b[j]*s1[j]);
-                if(fn[0]>fs[0]){
-                    fn[1] = peso(s1, ma, d);
-                    if(fn[1]<=cap){
-                        s1[m] = true;
-                        return s1;
-                    }
-                }
-                else if(fn[0]==fs[0]){
-                    fn[1] = peso(s1, ma, d);
-                    if(fn[1]<fs[1]){
-                        s1[m] = true;
-                        return s1;
-                    }
-                }
-            }
+            swap(s1[in], s1[out]);
         }
     }
     return s;
@@ -73,7 +76,6 @@ vector<bool> randomFlipStep(int &m, int &max, int &cap, const vector<bool> &s, v
     vector<int> fs = funcaoObjetivo(s, ma, d, b), fn(2,0);
     int r, i = 0;
     do {
-        s1 = s;
         r = rand()%m;
         if(s1[r]==0){
             s1[r] = 1; 
@@ -85,6 +87,7 @@ vector<bool> randomFlipStep(int &m, int &max, int &cap, const vector<bool> &s, v
                     return s1;
                 }
             }
+            s1[r] = 0;
         }
         i++;
     } while (i<max);
@@ -92,10 +95,9 @@ vector<bool> randomFlipStep(int &m, int &max, int &cap, const vector<bool> &s, v
 }
 
 vector<bool> firstFlipStep(int &m, int &cap, const vector<bool> &s, vector<int> &b, vector<int> &d, vector<TP> &ma){
-    vector<bool> s1;
+    vector<bool> s1 = s;
     vector<int> fs = funcaoObjetivo(s, ma, d, b), fn(2,0);
     for(int i = 0; i<m; i++){
-        s1 = s;
         if(s1[i]==0){
             s1[i] = 1; 
             fn[0] = fs[0]-(b[i]*s[i])+(b[i]*s1[i]);
@@ -106,6 +108,7 @@ vector<bool> firstFlipStep(int &m, int &cap, const vector<bool> &s, vector<int> 
                     return s1;
                 }
             }
+            s1[i] = 0;
         }
     }
     return s;

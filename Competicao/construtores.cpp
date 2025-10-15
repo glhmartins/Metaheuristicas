@@ -5,14 +5,9 @@ using namespace std;
 
 int somaDependencia(int &p, vector<TP> &ma, vector<int> &d){
     int sum = 0;
-    for(int i = 0; i<ma.size(); i++){
-        if(ma[i].pacote == p){
-            for(int dp: ma[i].deps){
-                sum += d[dp];
-                d[dp] = 0;
-            }
-            
-        }
+    for(int dp: ma[p].deps){
+        sum += d[dp];
+        d[dp] = 0;
     }
     return sum;
 }

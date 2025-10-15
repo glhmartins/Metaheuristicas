@@ -9,7 +9,7 @@ void grasp(int &m, int max, int &cap, float alpha, vector<bool> &s, vector<int> 
     for(int i = 0; i<max; i++){
         sn = s;
         sn = construtorGulosoAleatorio(m, cap, sn, alpha, d, b, ma);
-        sn = rvns(m, 25, cap, sn, b, d, ma);
+        sn = rvns(m, 30, cap, sn, b, d, ma);
         fn[0] = beneficio(sn, b);
         if(fn[0]>fs[0]){
             fs[0] = fn[0];
