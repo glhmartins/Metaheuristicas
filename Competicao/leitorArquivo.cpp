@@ -1,7 +1,4 @@
-#include <fstream>
-#include <vector>
-#include <sstream>
-#include <string>
+#include "TP.cpp"
 
 using namespace std;
 
@@ -35,16 +32,24 @@ void auxDependencia(string &line, vector<int> &aux){
     }
 }
 
-void converteDependencias(ifstream &arq, vector<vector<int>> &ma){
+void converteDependencias(ifstream &arq, vector<TP> &ma){
     string line;
+    int i = -1;
     while(getline(arq, line) && line != ""){
         vector<int> aux;
         auxDependencia(line, aux);
-        ma.push_back(aux);
+        if(ma.size()>0 && i==aux[0]) ma[i].deps.push_back(aux[1]);
+        else {
+            i++;
+            TP p;
+            p.pacote = aux[0];
+            p.deps.push_back(aux[1]);
+            ma.push_back(p);
+        }
     }
 }
 
-void leArquivo(vector<int> &d, vector<int> &b, vector<vector<int>> &ma, string nomeArquivo, int &m, int &n, int &ne, int &cap){
+void leArquivo(vector<int> &d, vector<int> &b, vector<TP> &ma, string &nomeArquivo, int &m, int &n, int &ne, int &cap){
     ifstream arq(nomeArquivo);
     converteLinhaTamanhos(arq, m, n, ne, cap);
     converteLinha(arq, b);

@@ -4,7 +4,7 @@ using namespace std;
 
 /* Fazer sort para que o algoritmo guloso pegue sempre o de maior beneficio */
 
-void merge(vector<int> &b, vector<int> &pos, int inicio, int meio, int fim){
+void merge(vector<int> &b, vector<int> &pos, int &inicio, int &meio, int &fim){
     int i = inicio, j = meio+1, k = 0, auxB[fim-inicio+1], auxP[fim-inicio+1];
     while(i<=meio && j<=fim){
         if(b[i]>b[j]){

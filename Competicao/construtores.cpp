@@ -1,23 +1,23 @@
-#include <cmath>
-#include <ctime>
-#include <algorithm>
 #include "leitorArquivo.cpp"
 #include "sortGuloso.cpp"
 
 using namespace std;
 
-int somaDependencia(int &p, vector<vector<int>> &ma, vector<int> &d){
+int somaDependencia(int &p, vector<TP> &ma, vector<int> &d){
     int sum = 0;
     for(int i = 0; i<ma.size(); i++){
-        if(ma[i][0] == p){
-            sum += d[ma[i][1]];
-            d[ma[i][1]] = 0;
+        if(ma[i].pacote == p){
+            for(int dp: ma[i].deps){
+                sum += d[dp];
+                d[dp] = 0;
+            }
+            
         }
     }
     return sum;
 }
 
-vector<bool> construtorGulosoAleatorio(int &m, int &cap, vector<bool> p, float fator, vector<int> d, vector<int> b, vector<vector<int>> &ma){
+vector<bool> construtorGulosoAleatorio(int &m, int &cap, vector<bool> &p, float fator, vector<int> d, vector<int> b, vector<TP> &ma){
     int pa = 0, sumDeps = 0, be = 0, r = (rand()%(m-1))*fator;
     vector<int> pos;
     for(int k = 0; k<m; k++) pos.push_back(k);
@@ -35,7 +35,7 @@ vector<bool> construtorGulosoAleatorio(int &m, int &cap, vector<bool> p, float f
     return p;
 }
 
-vector<bool> construtorAleatorio(int &m, int &cap, vector<bool> p, vector<int> d, vector<int> b, vector<vector<int>> &ma){
+vector<bool> construtorAleatorio(int &m, int &cap, vector<bool> &p, vector<int> d, vector<int> b, vector<TP> &ma){
     int pa = 0, r = rand()%(m-1), sumDeps = 0, be = 0;
     vector<int> pos;
     for(int k = 0; k<m; k++) pos.push_back(k);
@@ -52,7 +52,7 @@ vector<bool> construtorAleatorio(int &m, int &cap, vector<bool> p, vector<int> d
     return p;
 }
 
-vector<bool> construtorGuloso(int &m, int &cap, vector<bool> p, vector<int> d, vector<int> b, vector<vector<int>> &ma){
+vector<bool> construtorGuloso(int &m, int &cap, vector<bool> &p, vector<int> d, vector<int> b, vector<TP> &ma){
     int i = 0, pa = 0, sumDeps = 0, be = 0;
     vector<int> pos;
     for(int k = 0; k<m; k++) pos.push_back(k);
