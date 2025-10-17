@@ -2,13 +2,14 @@
 
 using namespace std;
 
-int peso(const vector<bool> &p, vector<TP> &ma,  vector<int> d){
+int peso(const vector<bool> &p, vector<bool> &deps, vector<TP> &ma,  vector<int> d){
     clock_t ti = clock(), tf;
     int sum = 0;
     for(int i = 0; i<ma.size(); i++){
         if(p[ma[i].pacote]==1){
             for(int dp: ma[i].deps){
                 sum += d[dp];
+                deps[dp] = true;
                 d[dp] = 0;
             }
         }
@@ -25,9 +26,9 @@ int beneficio(const vector<bool> &p, vector<int> &b){
     return sum;
 }
 
-vector<int> funcaoObjetivo(const vector<bool> &p, vector<TP> &ma, vector<int> &d, vector<int> &b){
+vector<int> funcaoObjetivo(const vector<bool> &p, vector<bool> &deps, vector<TP> &ma, vector<int> &d, vector<int> &b){
     vector<int> bd;
     bd.push_back(beneficio(p, b));
-    bd.push_back(peso(p, ma, d));
+    bd.push_back(peso(p, deps ,ma, d));
     return bd;
 }
