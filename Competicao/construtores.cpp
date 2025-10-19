@@ -3,23 +3,22 @@
 
 using namespace std;
 
-int somaDependencia(int &p, vector<TP> &ma, vector<int> &d, vector<bool> &deps){
+int somaDependencia(int &p, vector<TP> &ma, vector<int> &d){
     int sum = 0;
     for(int dp: ma[p].deps){
         sum += d[dp];
-        deps[dp] = true;
         d[dp] = 0;
     }
     return sum;
 }
 
-vector<bool> construtorGulosoAleatorio(int &m, int &cap, vector<bool> &p, vector<bool> &deps, float fator, vector<int> d, vector<int> b, vector<TP> &ma){
+vector<bool> construtorGulosoAleatorio(int &m, int &cap, vector<bool> &p, float fator, vector<int> d, vector<int> b, vector<TP> &ma){
     int pa = 0, sumDeps = 0, be = 0, r = (rand()%(m-1))*fator;
     vector<int> pos;
     for(int k = 0; k<m; k++) pos.push_back(k);
     mergesort(b, pos, 0, m-1);
     while(pa<cap){
-        sumDeps = somaDependencia(pos[r], ma, d, deps);
+        sumDeps = somaDependencia(pos[r], ma, d);
         if(pa+sumDeps>cap) break;
         p[pos[r]] = true;
         be += b[r];
@@ -31,12 +30,12 @@ vector<bool> construtorGulosoAleatorio(int &m, int &cap, vector<bool> &p, vector
     return p;
 }
 
-vector<bool> construtorAleatorio(int &m, int &cap, vector<bool> &p, vector<bool> &deps, vector<int> d, vector<int> b, vector<TP> &ma){
+vector<bool> construtorAleatorio(int &m, int &cap, vector<bool> &p, vector<int> d, vector<int> b, vector<TP> &ma){
     int pa = 0, r = rand()%(m-1), sumDeps = 0, be = 0;
     vector<int> pos;
     for(int k = 0; k<m; k++) pos.push_back(k);
     while(pa<cap){
-        sumDeps = somaDependencia(pos[r], ma, d, deps);
+        sumDeps = somaDependencia(pos[r], ma, d);
         if(pa+sumDeps>cap) break;
         p[pos[r]] = true;
         be += b[r];
@@ -48,13 +47,13 @@ vector<bool> construtorAleatorio(int &m, int &cap, vector<bool> &p, vector<bool>
     return p;
 }
 
-vector<bool> construtorGuloso(int &m, int &cap, vector<bool> &p, vector<bool> &deps, vector<int> d, vector<int> b, vector<TP> &ma){
+vector<bool> construtorGuloso(int &m, int &cap, vector<bool> &p, vector<int> d, vector<int> b, vector<TP> &ma){
     int i = 0, pa = 0, sumDeps = 0, be = 0;
     vector<int> pos;
     for(int k = 0; k<m; k++) pos.push_back(k);
     mergesort(b, pos, 0, m-1);
     while((i<m)){ 
-        sumDeps = somaDependencia(pos[i], ma, d, deps);
+        sumDeps = somaDependencia(pos[i], ma, d);
         if(pa+sumDeps>cap) break;
         pa += sumDeps;
         p[pos[i]] = true;

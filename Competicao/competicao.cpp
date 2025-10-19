@@ -3,33 +3,27 @@
 
 using namespace std;
 
-int grasp(int &m, int max, int &cap, float alpha, vector<bool> &s, vector<bool> &deps, vector<int> &b, vector<int> &d, vector<TP> &ma){
+int grasp(int &m, int max, int &cap, float alpha, vector<bool> &s, vector<int> &b, vector<int> &d, vector<TP> &ma){
     vector<int> fs(2,0), fn(2,0);
     fs[1] = (int) MAXFLOAT;
-    vector<bool> sf = s, sn, df = deps, dn;
+    vector<bool> sf = s, sn;
     for(int i = 0; i<max; i++){
         sn = s;
-        dn = deps;
-        sn = construtorGulosoAleatorio(m, cap, sn, dn, alpha, d, b, ma);
-        sn = rvns(m, 30, cap, sn, deps, b, d, ma);
-        fn = funcaoObjetivo(sn, dn, ma, d, b);
+        sn = construtorGulosoAleatorio(m, cap, sn, alpha, d, b, ma);
+        sn = rvns(m, 30, cap, sn, b, d, ma);
+        fn = funcaoObjetivo(sn, ma, d, b);
         if(fn[0]>fs[0] && fn[1]<=cap){
             fs[0] = fn[0];
             fs[1] = fn[1];
             sf = sn;
-            df = dn;
         }
         //cout << endl << " beneficio[" << i << "]: " << fn[0] << endl;
     }
     cout << endl << "beneficio: " << fs[0] <<  " peso: " << fs[1] << endl;
     s = sf;
-    deps = df;
     cout << "[";
     for(int i = 0; i<m-1; i++) cout << ((s[i]==false)? "0, ":"1, " );
     cout << ((s[m-1]==false)? '0':'1') << ']' << endl;
-    cout << "[";
-    for(int i = 0; i<deps.size()-1; i++) cout << ((deps[i]==false)? "0, " :"1, ");
-    cout << ((deps[deps.size()-1]==false)? '0':'1') << ']' << endl;
     return fs[0];
 }
 
@@ -74,19 +68,19 @@ int main(){
     vector<int> sols;
     vector<double> sol, tempo;
     double t, dp;
-    string a[] = {"i1.txt", "i2.txt", "i3.txt", "i4.txt", "i5.txt", "i6.txt", "i7.txt"};
-    for(int j = 0; j<7; j++){
+    string a[] = {"i1.txt", "i2.txt", "i3.txt", "i4.txt", "i5.txt", "i6.txt", "i7.txt", "sukp02.txt", "sukp07.txt", "sukp28.txt"};
+    for(int j = 0; j<1; j++){
         d.clear();
         b.clear();
         ma.clear();
-        leArquivo(d, b, ma, a[j],m, n, ne, cap);
+        leArquivo(d, b, ma, a[0],m, n, ne, cap);
         sols.clear();
         sol.clear();
         tempo.clear();
-        for(int i = 0; i<3; i++){
-            vector<bool> p(m+1, false), deps(n, false);
+        for(int i = 0; i<15; i++){
+            vector<bool> p(m+1, false);
             ti = clock();
-            sols.push_back(grasp(m, 30, cap, 0.8, p, deps, b, d, ma));
+            sols.push_back(grasp(m, 30, cap, 0.333, p, b, d, ma));
             tf = clock();
             t = (double) (tf-ti)/CLOCKS_PER_SEC;
             cout << t << endl;
