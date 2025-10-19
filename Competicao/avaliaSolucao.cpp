@@ -2,6 +2,17 @@
 
 using namespace std;
 
+int pesoDtF(vector<TP> &ma,  vector<int> d, vector<int> &dt){
+    int sum = 0;
+    for(int in: dt){
+        for(int dp: ma[in].deps){
+            sum += d[dp];
+            d[dp] = 0;
+        }
+    }
+    return sum;
+}
+
 int peso(const vector<bool> &p, vector<TP> &ma,  vector<int> d){
     clock_t ti = clock(), tf;
     int sum = 0;

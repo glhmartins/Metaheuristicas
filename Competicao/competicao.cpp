@@ -10,7 +10,7 @@ int grasp(int &m, int max, int &cap, float alpha, vector<bool> &s, vector<int> &
     for(int i = 0; i<max; i++){
         sn = s;
         sn = construtorGulosoAleatorio(m, cap, sn, alpha, d, b, ma);
-        sn = rvns(m, 30, cap, sn, b, d, ma);
+        sn = rvns(m, 100, cap, sn, b, d, ma);
         fn = funcaoObjetivo(sn, ma, d, b);
         if(fn[0]>fs[0] && fn[1]<=cap){
             fs[0] = fn[0];
@@ -73,14 +73,14 @@ int main(){
         d.clear();
         b.clear();
         ma.clear();
-        leArquivo(d, b, ma, a[0],m, n, ne, cap);
+        leArquivo(d, b, ma, a[7],m, n, ne, cap);
         sols.clear();
         sol.clear();
         tempo.clear();
-        for(int i = 0; i<15; i++){
+        for(int i = 0; i<30; i++){
             vector<bool> p(m+1, false);
             ti = clock();
-            sols.push_back(grasp(m, 30, cap, 0.333, p, b, d, ma));
+            sols.push_back(grasp(m, 100, cap, 0.8, p, b, d, ma));
             tf = clock();
             t = (double) (tf-ti)/CLOCKS_PER_SEC;
             cout << t << endl;
