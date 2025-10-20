@@ -68,7 +68,7 @@ int main(){
     vector<int> sols;
     vector<double> sol, tempo;
     double t, dp;
-    string a[] = {"i1.txt", "i2.txt", "i3.txt", "i4.txt", "i5.txt", "i6.txt", "i7.txt", "sukp02.txt", "sukp07.txt", "sukp28.txt"};
+    string a[] = {"sukp01.txt", "sukp02.txt", "sukp03.txt", "sukp06.txt", "sukp07.txt", "sukp12.txt", "sukp18.txt", "sukp24.txt", "sukp28.txt", "sukp29.txt"};
     for(int j = 0; j<1; j++){
         d.clear();
         b.clear();
