@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void preencher(int &m, const vector<bool>& s, vector<int> &dt, vector<int> &f) {
+void preencher(int &m, const vector<bool> &s, vector<int> &dt, vector<int> &f) {
     dt.clear();
     f.clear();
     for (int i = 0; i < m; i++) {
@@ -11,7 +11,36 @@ void preencher(int &m, const vector<bool>& s, vector<int> &dt, vector<int> &f) {
     }
 }
 
-vector<bool> randomSwapStep(int &m, int &max, int &cap, const vector<bool> &s, vector<int> &dt, vector<int> &f, vector<int> &b, vector<int> &d, vector<TP> &ma){
+vector<bool> randomSwapPerturbacao(int &max, int &cap, const vector<bool> &s, vector<int> &dt, vector<int> &f, vector<int> &d, const vector<TP> &ma){
+    vector<bool> s1 = s;
+    int r1, r2, i = 0, in, out, peso;
+    do {
+        r1 = rand()%(dt.size());
+        r2 = rand()%(f.size());
+        in = dt[r1];
+        out = f[r2];
+        swap(s1[in], s1[out]);
+        dt[r1] = out;
+        f[r2] = in;
+        peso = pesoDtF(ma, d, dt);
+        if(peso<=cap) return s1;
+        swap(s1[in], s1[out]);
+        dt[r1] = in;
+        f[r2] = out;
+        i++;
+    } while (i<max);
+    return s;
+}
+
+vector<bool> perturbacao(int &m, int &max, int &cap, int nivel, const vector<bool> &s, vector<int> &d, const vector<TP> &ma){
+    vector<int> dt, f;
+    vector<bool> sp = s;
+    preencher(m, sp, dt, f);
+    for(int i = 0; i<nivel; i++) sp = randomSwapPerturbacao(max, cap, sp, dt, f, d, ma);
+    return sp;
+}
+
+vector<bool> randomSwapStep(int &m, int &max, int &cap, const vector<bool> &s, vector<int> &dt, vector<int> &f, vector<int> &b, vector<int> &d, const vector<TP> &ma){
     vector<bool> s1 = s;
     vector<int> fs = funcaoObjetivo(s, ma, d, b), fn(2,0);
     int r1, r2, i = 0, in, out;
@@ -46,7 +75,7 @@ vector<bool> randomSwapStep(int &m, int &max, int &cap, const vector<bool> &s, v
     return s;
 }
 
-vector<bool> firstSwapStep(int &m, int &cap, const vector<bool> &s, vector<int> &dt, vector<int> &f, vector<int> &b, vector<int> &d, vector<TP> &ma){
+vector<bool> firstSwapStep(int &m, int &cap, const vector<bool> &s, vector<int> &dt, vector<int> &f, vector<int> &b, vector<int> &d, const vector<TP> &ma){
     vector<bool> s1 = s;
     vector<int> fs = funcaoObjetivo(s, ma, d, b), fn(2,0);
     int in, out;
@@ -80,7 +109,7 @@ vector<bool> firstSwapStep(int &m, int &cap, const vector<bool> &s, vector<int> 
     return s;
 }
 
-vector<bool> randomFlipStep(int &m, int &max, int &cap, const vector<bool> &s, vector<int> &dt, vector<int> &f, vector<int> &b, vector<int> &d, vector<TP> &ma){
+vector<bool> randomFlipStep(int &m, int &max, int &cap, const vector<bool> &s, vector<int> &dt, vector<int> &f, vector<int> &b, vector<int> &d, const vector<TP> &ma){
     vector<bool> s1 = s;
     vector<int> fs = funcaoObjetivo(s,  ma, d, b), fn(2,0);
     int r, i = 0, out;
@@ -108,7 +137,7 @@ vector<bool> randomFlipStep(int &m, int &max, int &cap, const vector<bool> &s, v
     return s;
 }
 
-vector<bool> firstFlipStep(int &m, int &cap, const vector<bool> &s, vector<int> &dt, vector<int> &f, vector<int> &b, vector<int> &d, vector<TP> &ma){
+vector<bool> firstFlipStep(int &m, int &cap, const vector<bool> &s, vector<int> &dt, vector<int> &f, vector<int> &b, vector<int> &d, const vector<TP> &ma){
     vector<bool> s1 = s;
     vector<int> fs = funcaoObjetivo(s,  ma, d, b), fn(2,0);
     int out;
@@ -134,7 +163,7 @@ vector<bool> firstFlipStep(int &m, int &cap, const vector<bool> &s, vector<int> 
     return s;
 }
 
-vector<bool> rvns(int &m, int max, int &cap, vector<bool> &s, vector<int> &b, vector<int> &d, vector<TP> &ma){
+vector<bool> rvnd(int &m, int max, int &cap, vector<bool> &s, vector<int> &b, vector<int> &d, const vector<TP> &ma){
     vector<bool> sf;
     vector<int> dt, f;
     int i = 0, r;

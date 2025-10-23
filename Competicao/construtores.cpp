@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int somaDependencia(int &p, vector<TP> &ma, vector<int> &d){
+int somaDependencia(int &p, const vector<TP> &ma, vector<int> &d){
     int sum = 0;
     for(int dp: ma[p].deps){
         sum += d[dp];
@@ -12,7 +12,7 @@ int somaDependencia(int &p, vector<TP> &ma, vector<int> &d){
     return sum;
 }
 
-vector<bool> construtorGulosoAleatorio(int &m, int &cap, vector<bool> &p, float fator, vector<int> d, vector<int> b, vector<TP> &ma){
+vector<bool> construtorGulosoAleatorio(int &m, int &cap, vector<bool> &p, float fator, vector<int> d, vector<int> b, const vector<TP> &ma){
     int pa = 0, sumDeps = 0, be = 0, r = (rand()%(m-1))*fator;
     vector<int> pos;
     for(int k = 0; k<m; k++) pos.push_back(k);
@@ -30,7 +30,7 @@ vector<bool> construtorGulosoAleatorio(int &m, int &cap, vector<bool> &p, float 
     return p;
 }
 
-vector<bool> construtorAleatorio(int &m, int &cap, vector<bool> &p, vector<int> d, vector<int> b, vector<TP> &ma){
+vector<bool> construtorAleatorio(int &m, int &cap, vector<bool> &p, vector<int> d, vector<int> b, const vector<TP> &ma){
     int pa = 0, r = rand()%(m-1), sumDeps = 0, be = 0;
     vector<int> pos;
     for(int k = 0; k<m; k++) pos.push_back(k);
@@ -47,7 +47,7 @@ vector<bool> construtorAleatorio(int &m, int &cap, vector<bool> &p, vector<int> 
     return p;
 }
 
-vector<bool> construtorGuloso(int &m, int &cap, vector<bool> &p, vector<int> d, vector<int> b, vector<TP> &ma){
+vector<bool> construtorGuloso(int &m, int &cap, vector<bool> &p, vector<int> d, vector<int> b, const vector<TP> &ma){
     int i = 0, pa = 0, sumDeps = 0, be = 0;
     vector<int> pos;
     for(int k = 0; k<m; k++) pos.push_back(k);

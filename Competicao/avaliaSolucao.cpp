@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int pesoDtF(vector<TP> &ma,  vector<int> d, vector<int> &dt){
+int pesoDtF(const vector<TP> &ma,  vector<int> d, vector<int> &dt){
     int sum = 0;
     for(int in: dt){
         for(int dp: ma[in].deps){
@@ -13,7 +13,7 @@ int pesoDtF(vector<TP> &ma,  vector<int> d, vector<int> &dt){
     return sum;
 }
 
-int peso(const vector<bool> &p, vector<TP> &ma,  vector<int> d){
+int peso(const vector<bool> &p, const vector<TP> &ma,  vector<int> d){
     clock_t ti = clock(), tf;
     int sum = 0;
     for(int i = 0; i<ma.size(); i++){
@@ -36,7 +36,7 @@ int beneficio(const vector<bool> &p, vector<int> &b){
     return sum;
 }
 
-vector<int> funcaoObjetivo(const vector<bool> &p, vector<TP> &ma, vector<int> &d, vector<int> &b){
+vector<int> funcaoObjetivo(const vector<bool> &p, const vector<TP> &ma, vector<int> &d, vector<int> &b){
     vector<int> bd;
     bd.push_back(beneficio(p, b));
     bd.push_back(peso(p ,ma, d));
