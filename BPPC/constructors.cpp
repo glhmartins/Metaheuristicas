@@ -2,6 +2,15 @@
 
 using namespace std;
 
+bool verifyConflict(const TB &bin, const TI &item){
+    for(int item_bin: bin.items){
+        for(int item_to_pack: item.conflicts){
+            if(item_bin==item_to_pack) return true;
+        }
+    }
+    return false;
+}
+
 void greedyConstructor(vector<TI> items, vector<TB> &bins, const int &capacity, const int &n_items){
     TB bin;
     bin.current_weight = 0;

@@ -84,10 +84,8 @@ int main(){
         infile >> instance_type;
         cout << "Instance type: " << instance_type << endl;
         read(items, infile, capacity, n_items, 0);
-        //for(int j = 0; j<bins.size(); j++) cout << "bin " << j << " weight: " << bins[j].current_weight << endl;
-        //greedyConstructor(items, bins, capacity, n_items);
-        grasp(items, bins, n_items, capacity, 0.2, 10);
-        //cout << "Num of bins: " << bins.size() << endl;
+        grasp(items, bins, n_items, capacity, 1, 10);
+        cout << "Num of bins: " << bins.size() << endl;
     }
     infile.close();
     return 0;
