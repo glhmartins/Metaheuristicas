@@ -2,15 +2,6 @@
 
 using namespace std;
 
-bool verifyConflict(const TB &bin, const TI &item){
-    for(int item_bin: bin.items){
-        for(int item_to_pack: item.conflicts){
-            if(item_bin==item_to_pack) return true;
-        }
-    }
-    return false;
-}
-
 void greedyConstructor(vector<TI> items, vector<TB> &bins, const int &capacity, const int &n_items){
     TB bin;
     bin.current_weight = 0;
@@ -37,14 +28,14 @@ void greedyConstructor(vector<TI> items, vector<TB> &bins, const int &capacity, 
     }
 }
 
-void greedyRandomizedConstructor(vector<TI> items, vector<TB> &bins, const int &capacity, const int &n_items, float fator){
+void greedyRandomizedConstructor(vector<TI> items, vector<TB> &bins, const int &capacity, const int &n_items, float alpha){
     TB bin;
     bin.current_weight = 0;
     bin.id = 0;
     bins.push_back(bin);
     mergesort(items, 0, n_items-1);
     while(items.size()>=1){
-        int j = 0, r = (rand()%(items.size()))*fator;;
+        int j = 0, r = (rand()%(items.size()))*alpha;;
         bool packed = false;
         while(j<bins.size() && !packed){
             if((items[r].weight+bins[j].current_weight<=capacity) && !verifyConflict(bins[j], items[r])){

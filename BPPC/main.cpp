@@ -1,59 +1,37 @@
 #include "instance_reader.cpp"
 #include "constructors.cpp"
+#include "local_search.cpp"
 
 using namespace std;
 
-/*int ils(int &m, int max, int &cap, float alpha, vector<bool> &s, vector<int> &b, vector<int> &d, const vector<TP> &ma){
-    vector<int> fs(2,0), fp(2,0);
-    vector<bool> sf = s, sp;
-    //sf = construtorGulosoAleatorio(m, cap, sf, alpha, d, b, ma);
-    sf = rvnd(m, 100, cap, sf, b, d, ma);
-    //fs = funcaoObjetivo(sf, ma, d, b);
+void ils(vector<TI> &items, vector<TB> &bins, const int &n_items, const int &capacity, const float alpha, const int max){
+    vector<TB> aux = bins;
+    greedyRandomizedConstructor(items, aux, capacity, n_items, alpha);
+    rvnd(items, aux, n_items, capacity, max);
     int nivel = 1;
     for(int i = 0; i<max; i++){
-        sp = perturbacao(m, max, cap, nivel, sf, d, ma);
-        sp = rvnd(m, 30, cap, sp, b, d, ma);
-        fp = funcaoObjetivo(sp, ma, d, b);
-        if(fp[0]>fs[0] && fp[1]<=cap){
-            fs[0] = fp[0];
-            fs[1] = fp[1];
-            sf = sp;
+        //aux = perturbacao(m, max, cap, nivel, sf, d, ma);
+        rvnd(items, aux, n_items, capacity, max);
+        if(aux.size()<bins.size()){
+            bins = aux;
             nivel = (nivel==1)? 1:nivel--;
         } else nivel++;
-        //cout << endl << " beneficio[" << i << "]: " << fn[0] << endl;
     }
-    cout << endl << "beneficio: " << fs[0] <<  " peso: " << fs[1] << endl;
-    s = sf;
-    cout << "[";
-    for(int i = 0; i<m-1; i++) cout << ((s[i]==false)? "0, ":"1, " );
-    cout << ((s[m-1]==false)? '0':'1') << ']' << endl;
-    return fs[0];
+    bins = aux;
 }
 
 
-int grasp(int &m, int max, int &cap, float alpha, vector<bool> &s, vector<int> &b, vector<int> &d, const vector<TP> &ma){
-    vector<int> fs(2,0), fn(2,0);
-    fs[1] = (int) MAXFLOAT;
-    vector<bool> sf = s, sn;
+void grasp(vector<TI> &items, vector<TB> &bins, const int &n_items, const int &capacity, const float alpha, const int max){
+    vector<TB> bins_copy = bins, aux;
     for(int i = 0; i<max; i++){
-        sn = s;
-        //sn = construtorGulosoAleatorio(m, cap, sn, alpha, d, b, ma);
-        sn = rvnd(m, 30, cap, sn, b, d, ma);
-        //fn = funcaoObjetivo(sn, ma, d, b);
-        if(fn[0]>fs[0] && fn[1]<=cap){
-            fs[0] = fn[0];
-            fs[1] = fn[1];
-            sf = sn;
-        }
-        //cout << endl << " beneficio[" << i << "]: " << fn[0] << endl;
+        aux = bins;
+        greedyRandomizedConstructor(items, aux, capacity, n_items, alpha);
+        rvnd(items, aux, n_items, capacity, max);
+        if(aux.size()<bins_copy.size() || i==0) bins_copy = aux;
+        cout << "Num of bins: " << bins_copy.size() << endl;
     }
-    cout << endl << "beneficio: " << fs[0] <<  " peso: " << fs[1] << endl;
-    s = sf;
-    cout << "[";
-    for(int i = 0; i<m-1; i++) cout << ((s[i]==false)? "0, ":"1, " );
-    cout << ((s[m-1]==false)? '0':'1') << ']' << endl;
-    return fs[0];
-}*/
+    bins = bins_copy;
+}
 
 vector<double> valoresFo(vector<int> sols){
     vector<double> p(3,0);
@@ -107,7 +85,9 @@ int main(){
         cout << "Instance type: " << instance_type << endl;
         read(items, infile, capacity, n_items, 0);
         //for(int j = 0; j<bins.size(); j++) cout << "bin " << j << " weight: " << bins[j].current_weight << endl;
-        cout << "Num of bins: " << bins.size() << endl;
+        //greedyConstructor(items, bins, capacity, n_items);
+        grasp(items, bins, n_items, capacity, 0.2, 10);
+        //cout << "Num of bins: " << bins.size() << endl;
     }
     infile.close();
     return 0;

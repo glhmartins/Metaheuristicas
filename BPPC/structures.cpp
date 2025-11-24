@@ -24,4 +24,13 @@ typedef struct bin {
     vector<int> items;
 } TB;
 
+bool verifyConflict(const TB &bin, const TI &item){
+    for(int item_bin: bin.items){
+        for(int item_to_pack: item.conflicts){
+            if(item_bin==item_to_pack) return true;
+        }
+    }
+    return false;
+}
+
 #endif
