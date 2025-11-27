@@ -5,19 +5,20 @@
 using namespace std;
 
 void ils(vector<TI> &items, vector<TB> &bins, const int &n_items, const int &capacity, const float alpha, const int max){
-    vector<TB> aux = bins;
-    greedyRandomizedConstructor(items, aux, capacity, n_items, alpha);
-    rvnd(items, aux, n_items, capacity, max);
+    vector<TB> aux;
     int nivel = 1;
+    greedyRandomizedConstructor(items, bins, capacity, n_items, alpha);
+    rvnd(items, bins, n_items, capacity, max);
     for(int i = 0; i<max; i++){
-        //aux = perturbacao(m, max, cap, nivel, sf, d, ma);
+        aux = bins;
+        perturbacao(items, aux, capacity, n_items, nivel);
         rvnd(items, aux, n_items, capacity, max);
         if(aux.size()<bins.size()){
             bins = aux;
             nivel = (nivel==1)? 1:nivel--;
-        } else nivel++;
+        } else if(nivel<10) nivel++;
     }
-    bins = aux;
+    if(aux.size()<bins.size()) bins = aux;
 }
 
 
@@ -28,7 +29,7 @@ void grasp(vector<TI> &items, vector<TB> &bins, const int &n_items, const int &c
         greedyRandomizedConstructor(items, aux, capacity, n_items, alpha);
         rvnd(items, aux, n_items, capacity, max);
         if(aux.size()<bins_copy.size() || i==0) bins_copy = aux;
-        cout << "Num of bins: " << bins_copy.size() << endl;
+        //cout << "Num of bins: " << bins_copy.size() << endl;
     }
     bins = bins_copy;
 }
@@ -66,7 +67,7 @@ double desvio(vector<int> sol, double media){
 }
 
 int main(){
-    int n_instances, capacity, n_items;
+    int n_instances, capacity, n_items, great;
     srand(time(NULL));
     vector<TI> items;
     vector<TB> bins;
@@ -83,9 +84,10 @@ int main(){
         bins.clear();
         infile >> instance_type;
         cout << "Instance type: " << instance_type << endl;
-        read(items, infile, capacity, n_items, 0);
-        grasp(items, bins, n_items, capacity, 1, 10);
-        cout << "Num of bins: " << bins.size() << endl;
+        read(items, infile, capacity, n_items, great, 0.1);
+        //grasp(items, bins, n_items, capacity, 1, 15);
+        ils(items, bins, n_items, capacity, 0.5, 30);
+        cout << "Num of bins: " << bins.size() << " Great: " << great << endl;
     }
     infile.close();
     return 0;

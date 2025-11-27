@@ -15,9 +15,8 @@ void generateConflicts(vector<TI> &items, int &n_itens, float alpha){
     }
 }
 
-void read(vector<TI> &items, ifstream &infile, int &capacity, int &n_itens, float alpha){
-    int trash;
-    infile >> capacity >> n_itens >> trash;
+void read(vector<TI> &items, ifstream &infile, int &capacity, int &n_itens, int &great, float alpha){
+    infile >> capacity >> n_itens >> great;
     for(int i = 0; i<n_itens; i++){
         TI new_item;
         infile >> new_item.weight;
