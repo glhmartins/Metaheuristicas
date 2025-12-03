@@ -4,37 +4,48 @@
 
 using namespace std;
 
-void ils(vector<TI> &items, vector<TB> &bins, const int &n_items, const int &capacity, const float alpha, const int max){
+void ils(vector<TI> &items, vector<TB> &bins, const int &n_items, const int &capacity, const float alpha, const int max_iter){
     vector<TB> aux;
-    int nivel = 1;
     greedyRandomizedConstructor(items, bins, capacity, n_items, alpha);
-    rvnd(items, bins, n_items, capacity, max);
-    for(int i = 0; i<max; i++){
+    cout << "constructor: " << bins.size();
+    rvnd(items, bins, capacity, max_iter);
+    int level = 1;
+    double current_fitness = calculateFitness(bins, capacity), aux_fitness;
+    for(int i = 0; i < max_iter; i++){
         aux = bins;
-        perturbacao(items, aux, capacity, n_items, nivel);
-        rvnd(items, aux, n_items, capacity, max);
-        if(aux.size()<bins.size()){
+        perturbation(items, aux, capacity, level);
+        rvnd(items, aux, capacity, max_iter);
+        aux_fitness = calculateFitness(aux, capacity);
+        if(aux.size() < bins.size()){
             bins = aux;
-            nivel = (nivel==1)? 1:nivel--;
-        } else if(nivel<10) nivel++;
+            current_fitness = aux_fitness;
+            level = 1;
+        } 
+        else if (aux.size() == bins.size() && aux_fitness > current_fitness + 1e-6) {   
+            bins = aux;
+            current_fitness = aux_fitness;
+            level = 1;
+        }
+        else if (level < (int) (n_items*0.1)) level++;
     }
-    if(aux.size()<bins.size()) bins = aux;
 }
 
 
 void grasp(vector<TI> &items, vector<TB> &bins, const int &n_items, const int &capacity, const float alpha, const int max){
     vector<TB> bins_copy = bins, aux;
+    int best_constructor = __INT_MAX__;
     for(int i = 0; i<max; i++){
         aux = bins;
         greedyRandomizedConstructor(items, aux, capacity, n_items, alpha);
-        rvnd(items, aux, n_items, capacity, max);
+        if(aux.size()<best_constructor) best_constructor = aux.size();
+        rvnd(items, aux, capacity, max);
         if(aux.size()<bins_copy.size() || i==0) bins_copy = aux;
-        //cout << "Num of bins: " << bins_copy.size() << endl;
     }
+    cout << "constructor: " << best_constructor;
     bins = bins_copy;
 }
 
-vector<double> valoresFo(vector<int> sols){
+vector<double> values(vector<int> sols){
     vector<double> p(3,0);
     p[2] = MAXFLOAT;
     for(int i = 0; i<sols.size(); i++){
@@ -46,15 +57,15 @@ vector<double> valoresFo(vector<int> sols){
     return p;
 }
 
-vector<double> tempos(vector<double> tempo){
+vector<double> times(vector<double> time){
     vector<double> t(3,0);
     t[2] = MAXFLOAT;
-    for(int i = 0; i<tempo.size(); i++){
-        t[0] += tempo[i];
-        if(tempo[i]>t[1]) t[1] = tempo[i];
-        if(tempo[i]<t[2]) t[2] = tempo[i];
+    for(int i = 0; i<time.size(); i++){
+        t[0] += time[i];
+        if(time[i]>t[1]) t[1] = time[i];
+        if(time[i]<t[2]) t[2] = time[i];
     }
-    t[0] = t[0]/tempo.size();
+    t[0] = t[0]/time.size();
     return t;
 }
 
@@ -68,12 +79,12 @@ double desvio(vector<int> sol, double media){
 
 int main(){
     int n_instances, capacity, n_items, great;
-    srand(time(NULL));
+    srand(time(0));
     vector<TI> items;
     vector<TB> bins;
     string instance_type;
     string archives[] = {"binpack1.txt", "binpack2.txt", "binpack3.txt", "binpack4.txt", "binpack5.txt", "binpack6.txt", "binpack7.txt", "binpack8.txt"};
-    ifstream infile(archives[0]);
+    ifstream infile(archives[1]);
     if(!infile.is_open()){
         cout << "Error" << endl;
         exit(1);
@@ -84,10 +95,10 @@ int main(){
         bins.clear();
         infile >> instance_type;
         cout << "Instance type: " << instance_type << endl;
-        read(items, infile, capacity, n_items, great, 0.1);
-        //grasp(items, bins, n_items, capacity, 1, 15);
-        ils(items, bins, n_items, capacity, 0.5, 30);
-        cout << "Num of bins: " << bins.size() << " Great: " << great << endl;
+        read(items, infile, capacity, n_items, great);
+        //grasp(items, bins, n_items, capacity, 0.5, 100);
+        ils(items, bins, n_items, capacity, 0.5, 100);
+        cout << " Local Search: " << bins.size() << " Great: " << great << endl;
     }
     infile.close();
     return 0;

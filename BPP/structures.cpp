@@ -15,7 +15,6 @@ using namespace std;
 typedef struct item {
     int id;
     double weight;
-    vector<int> conflicts;
 } TI;
 
 typedef struct bin {
@@ -24,13 +23,15 @@ typedef struct bin {
     vector<int> items;
 } TB;
 
-bool verifyConflict(const TB &bin, const TI &item){
-    for(int item_bin: bin.items){
-        for(int item_to_pack: item.conflicts){
-            if(item_bin==item_to_pack) return true;
+double calculateFitness(const vector<TB> &bins, int capacity) {
+    double fitness = 0.0, fillRatio;
+    for (const auto &bin : bins) {
+        if (!bin.items.empty()) {
+            fillRatio = (double) (bin.current_weight / capacity);
+            fitness += (fillRatio * fillRatio);
         }
     }
-    return false;
+    return fitness;
 }
 
 #endif
