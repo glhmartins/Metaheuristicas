@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void greedyRandomizedConstructor(vector<TI> items, vector<TB> &bins, const int &capacity, const int &n_items, float alpha){
+void greedyRandomizedConstructor(vector<TI> items, vector<TB> &bins, const double &capacity, const int &n_items, float alpha){
     TB bin;
     bin.current_weight = 0;
     bin.id = 0;
@@ -29,7 +29,7 @@ void greedyRandomizedConstructor(vector<TI> items, vector<TB> &bins, const int &
     }
 }
 
-void RandomConstructor(vector<TI> items, vector<TB> &bins, const int &capacity, const int &n_items){
+void RandomConstructor(vector<TI> items, vector<TB> &bins, const double &capacity, const int &n_items){
     TB bin;
     bin.current_weight = 0;
     bin.id = 0;

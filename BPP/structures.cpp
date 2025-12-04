@@ -23,7 +23,7 @@ typedef struct bin {
     vector<int> items;
 } TB;
 
-double calculateFitness(const vector<TB> &bins, int capacity) {
+double calculateFitness(const vector<TB> &bins, double capacity) {
     double fitness = 0.0, fillRatio;
     for (const auto &bin : bins) {
         if (!bin.items.empty()) {

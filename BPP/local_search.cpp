@@ -8,7 +8,7 @@ void cleanEmptyBins(vector<TB> &bins) {
     ),bins.end());
 }
 
-bool verifySwap(const vector<TI> &items, const TB &bin1_orig, const TB &bin2_orig, int item1_id, int item2_id, const int &capacity){
+bool verifySwap(const vector<TI> &items, const TB &bin1_orig, const TB &bin2_orig, int item1_id, int item2_id, const double &capacity){
     if (bin1_orig.current_weight - items[item1_id].weight + items[item2_id].weight > capacity) return false;
     if (bin2_orig.current_weight - items[item2_id].weight + items[item1_id].weight > capacity) return false;
     return true;
@@ -24,7 +24,7 @@ void swapItems(const vector<TI> &items, TB &bin1, TB &bin2, int item1, int item2
     *it2 = item1;
 }
 
-void perturbation(const vector<TI> &items, vector<TB> &bins, const int &capacity, int level) {
+void perturbation(const vector<TI> &items, vector<TB> &bins, const double &capacity, int level) {
     cleanEmptyBins(bins);
     if (bins.empty()) return;
     int bins_to_remove = level, best_bin; 
@@ -68,7 +68,7 @@ void perturbation(const vector<TI> &items, vector<TB> &bins, const int &capacity
 }
 
 // 1. Random Swap: Swap itens between random bins to improve fitness
-bool randomSwapStep(const vector<TI> &items, vector<TB> &bins, const int &capacity, const int max_iter){
+bool randomSwapStep(const vector<TI> &items, vector<TB> &bins, const double &capacity, const int max_iter){
     if (bins.size() < 2) return false;
     int b1, b2, item1_id, item2_id;
     for(int k=0; k < max_iter; k++) {
@@ -86,7 +86,7 @@ bool randomSwapStep(const vector<TI> &items, vector<TB> &bins, const int &capaci
 }
 
 // 2. Random Move: Moves an item from one random bin to another random bin
-bool randomMoveStep(const vector<TI> &items, vector<TB> &bins, const int &capacity, const int max_iter){
+bool randomMoveStep(const vector<TI> &items, vector<TB> &bins, const double &capacity, const int max_iter){
     if (bins.size() < 2) return false;
     int from, to, item_id, item_idx;
     for(int k=0; k < max_iter; k++) {
@@ -109,7 +109,7 @@ bool randomMoveStep(const vector<TI> &items, vector<TB> &bins, const int &capaci
 }
 
 // 3. First Move: Try emptying the lighter bin
-bool firstMoveStep(const vector<TI> &items, vector<TB> &bins, const int &capacity){
+bool firstMoveStep(const vector<TI> &items, vector<TB> &bins, const double &capacity){
     if (bins.empty()) return false;
     int rs = 0, item_id;
     double min_weight = __DBL_MAX__;
@@ -143,7 +143,7 @@ bool firstMoveStep(const vector<TI> &items, vector<TB> &bins, const int &capacit
 }
 
 // 4. binReshuffle: try emptying the five smaller bins
-bool binReshuffle(const vector<TI> &items, vector<TB> &bins, const int &capacity, const int attempts_limit){
+bool binReshuffle(const vector<TI> &items, vector<TB> &bins, const double &capacity, const int attempts_limit){
     if (bins.empty()) return false;
     vector<pair<double, int>> bin_weights;
     for(int i=0; i < bins.size(); ++i) bin_weights.push_back({bins[i].current_weight, i});
@@ -185,7 +185,7 @@ bool binReshuffle(const vector<TI> &items, vector<TB> &bins, const int &capacity
     return false;
 }
 
-void rvnd(const vector<TI> &items, vector<TB> &bins, const int &capacity, const int max_attempts) {
+void rvnd(const vector<TI> &items, vector<TB> &bins, const double &capacity, const int max_attempts) {
     if (bins.empty()) return;
     vector<TB> current_solution = bins;
     double current_fitness = calculateFitness(current_solution, capacity), cand_fitness;

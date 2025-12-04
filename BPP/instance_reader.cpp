@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void read(vector<TI> &items, ifstream &infile, int &capacity, int &n_itens, int &great){
+void read(vector<TI> &items, ifstream &infile, double &capacity, int &n_itens, int &great){
     infile >> capacity >> n_itens >> great;
     for(int i = 0; i<n_itens; i++){
         TI new_item;
